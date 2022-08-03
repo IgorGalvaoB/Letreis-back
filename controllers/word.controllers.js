@@ -1,7 +1,5 @@
 const client = require('../config/redis.config')
 
-
-
 const wordChecked = async (word)=>{
 
     const wordArr = word.split('')
@@ -47,10 +45,8 @@ const wordChecked = async (word)=>{
     halfMatch(wordArr,dayWord)
 
     exactMatch(wordArr,dayWordCopy)
-   
     
     return wordArr
-
 
 }
 module.exports=wordChecked
