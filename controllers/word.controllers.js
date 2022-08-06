@@ -1,37 +1,45 @@
-const client = require('../config/redis.config')
+//const client = require('../config/redis.config')
 
-const wordChecked = async (word)=>{
+const wordChecked = async (word) => {
 
     const wordArr = word.split('')
-
-    const dayWord = await client.get('dayWord').then(res=>res.split(''));
-    
+    //caçapa
+    //const dayWord = await client.get('dayWord').then(res=>res.split(''));
+    const dayWord = 'caçapá'
     const dayWordCopy = [...dayWord]
 
-    const halfMatch = (str,strToMatch)=>{
+    const halfMatch = (str, strToMatch) => {
 
-        for(i = 0; i < 6; i++){
-            if(strToMatch.includes(str[i])){
-                
-                const index = str.indexOf(str[i])
-    
-                str[i]=[str[i],1]
-    
-                strToMatch.splice(index,1)
-    
-            } else {
-    
-                str[i]=[str[i],0]
+        for (i = 0; i < 6; i++) {
+           
             
+            // if(strToMatch.includes(str[i])){
+            console.log(strToMatch,str[i])
+            console.log((strToMatch.localeCompare(str[i], 'pt-BR', { sensitivity: 'base' }) !== -1) )
+            if (strToMatch.localeCompare(str[i])!== -1) {
+                
+                //const index = strToMatch.indexOf(str[i]) 
+                const index = strToMatch.localeCompare(str[i])
+                console.log(index)
+                str[i] = [str[i], 1]
+                strToMatch=strToMatch.split('')
+                strToMatch.splice(index,1)
+                strToMatch=strToMatch.join('')
+                console.log(strToMatch)
+            } else {
+
+                str[i] = [str[i], 0]
+
             }
         }
-
+        console.log(str)
+        
     }
 
-    const exactMatch = (str,strToMatch)=>{
+    const exactMatch = (str, strToMatch) => {
 
-        for(i = 0; i < 6; i++){
-            
+        for (i = 0; i < 6; i++) {
+
             if (str[i][0] === strToMatch[i]) {
 
                 str[i][1] = 2
@@ -42,11 +50,11 @@ const wordChecked = async (word)=>{
 
     }
 
-    halfMatch(wordArr,dayWord)
 
-    exactMatch(wordArr,dayWordCopy)
-    
+    halfMatch(wordArr, dayWord)
+    exactMatch(wordArr, dayWordCopy)
+
     return wordArr
 
 }
-module.exports=wordChecked
+/*module.exports=*/wordChecked('cacapa')
