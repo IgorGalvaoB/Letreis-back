@@ -1,60 +1,62 @@
-//const client = require('../config/redis.config')
+const client = require('../config/redis.config')
 
 const wordChecked = async (word) => {
 
     const wordArr = word.split('')
-    //caçapa
-    //const dayWord = await client.get('dayWord').then(res=>res.split(''));
-    const dayWord = 'caçapá'
-    const dayWordCopy = [...dayWord]
 
-    const halfMatch = (str, strToMatch) => {
-
-        for (i = 0; i < 6; i++) {
-           
-            
-            // if(strToMatch.includes(str[i])){
-            console.log(strToMatch,str[i])
-            console.log((strToMatch.localeCompare(str[i], 'pt-BR', { sensitivity: 'base' }) !== -1) )
-            if (strToMatch.localeCompare(str[i])!== -1) {
-                
-                //const index = strToMatch.indexOf(str[i]) 
-                const index = strToMatch.localeCompare(str[i])
-                console.log(index)
-                str[i] = [str[i], 1]
-                strToMatch=strToMatch.split('')
-                strToMatch.splice(index,1)
-                strToMatch=strToMatch.join('')
-                console.log(strToMatch)
-            } else {
-
-                str[i] = [str[i], 0]
-
-            }
-        }
-        console.log(str)
-        
-    }
+    const dayWord = await client.get('dayWord').then(res => res.split(''));
 
     const exactMatch = (str, strToMatch) => {
 
         for (i = 0; i < 6; i++) {
+            const match = !str[i].localeCompare(strToMatch[i], 'pt-BR', { sensitivity: 'base' })
+            if (match) {
+                str[i] = [str[i], 2]
+                strToMatch[i] = [strToMatch[i], 'matched']
 
-            if (str[i][0] === strToMatch[i]) {
-
-                str[i][1] = 2
+            } else {
+                str[i] = [str[i], 0]
+                strToMatch[i] = [strToMatch[i],'notMatched'] 
 
             }
-
         }
+    }
+    const halfMatch = (str, strToMatch) => {
+
+        for (i = 0; i < 6; i++) {
+            if (str[i][1] === 2) {
+                continue
+            }
+            for (j = 0; j < strToMatch.length; j++) {
+                const matchedBefore = strToMatch[j][1] === 'matched'
+                
+                const match = !str[i][0].localeCompare(strToMatch[j][0], 'pt-BR', { sensitivity: 'base' })
+                
+                if (matchedBefore) {
+                    continue
+                }
+
+
+                if(match){
+                    str[i][1] = 1
+                    strToMatch.splice(j,1)
+                }
+
+            }
+        }
+
 
     }
 
 
+
+    exactMatch(wordArr, dayWord)
+
     halfMatch(wordArr, dayWord)
-    exactMatch(wordArr, dayWordCopy)
+
 
     return wordArr
 
+
 }
-/*module.exports=*/wordChecked('cacapa')
+module.exports = wordChecked

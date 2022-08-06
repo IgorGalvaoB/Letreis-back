@@ -9,14 +9,14 @@ const time = function(){
     let initialTime = new Date()
     const compare = async function (){
         const currentTime = new Date()
-        const dif = currentTime.getMinutes() - initialTime.getMinutes()
+        const dif = currentTime.getDate() - initialTime.getDate()
         if(dif){
             clearInterval(loop)
             initialTime = new Date()
             await randomWord(compare)
             
         }
-        console.log(currentTime.getMinutes())
+        
     }
     loop = setInterval(compare,1000)
 
@@ -25,7 +25,7 @@ const time = function(){
 const randomWord = async (callback) =>{
 
     const countWord = await Word.randomWord()
-    console.log(countWord)
+    await client.set('dayWord',countWord.word)
     loop = setInterval(callback,1000)
 
 }
