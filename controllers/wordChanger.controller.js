@@ -6,7 +6,7 @@ const client = require('../config/redis.config')
 let loop;
 
 const time = function(){
-    let initialTime = new Date()
+    let initialTime = new Date('2022,7,7')
     const compare = async function (){
         const currentTime = new Date()
         const dif = currentTime.getDate() - initialTime.getDate()
