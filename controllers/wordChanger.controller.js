@@ -10,7 +10,7 @@ const time = function(){
     const compare = async function (){
         const currentTime = new Date()
         const dif = currentTime.getDate() - initialTime.getDate()
-        console.log(dif)
+        console.log(dif, currentTime.getDate())
         if(dif){
             clearInterval(loop)
             initialTime = new Date()
