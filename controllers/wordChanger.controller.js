@@ -9,17 +9,16 @@ const time = function(){
     let initialTime = new Date()
     const compare = async function (){
         const currentTime = new Date()
-        const dif = currentTime.getMinutes() - initialTime.getMinutes()
+        const dif = currentTime.getDate() - initialTime.getDate()
+        console.log(dif)
         if(dif){
             clearInterval(loop)
             initialTime = new Date()
             await randomWord(compare)
-            
-            
-        }
-        
+        }   
     }
     loop = setInterval(compare,1000)
+
 }()
 
 const randomWord = async (callback) =>{
