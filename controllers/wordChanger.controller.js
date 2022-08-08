@@ -6,13 +6,14 @@ const client = require('../config/redis.config')
 let loop;
 
 const time = function(){
-    let initialTime = new Date()
+    let initialTime = Date.now()
     const compare = async function (){
-        const currentTime = new Date()
+        const currentTime = Date.now()
         const dif = currentTime.getDate() - initialTime.getDate()
+        console.log(dif)
         if(dif){
             clearInterval(loop)
-            initialTime = new Date()
+            initialTime = Date.now()
             await randomWord(compare)
             
         }
